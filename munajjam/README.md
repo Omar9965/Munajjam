@@ -20,6 +20,10 @@ Munajjam is a Python library that:
 pip install munajjam
 ```
 
+This installs all core dependencies including `torch`, `torchaudio`, `librosa`, and `numpy`.
+CTC-based alignment (CTC segmentation and forced alignment) requires `torchaudio` with the
+MMS model, which downloads automatically on first use.
+
 For faster transcription using CTranslate2:
 
 ```bash
@@ -156,12 +160,16 @@ results = align("001.mp3", segments, ayahs)
 
 | Strategy | Description | Use Case |
 |----------|-------------|----------|
-| `auto` | Automatically picks best strategy | **Recommended** - adapts to input |
+| `auto` | Picks best strategy based on surah size | **Recommended** - HYBRID for long surahs, CTC for short |
 | `word_dp` | Word-level DP with per-word timestamps | Sub-segment precision |
-| `ctc_seg` | CTC acoustic segmentation | Frame-accurate boundaries |
+| `ctc_seg` | CTC acoustic segmentation + word-DP fusion | Frame-accurate boundaries (short/medium surahs) |
 | `greedy` | Fast, simple matching | Quick prototyping |
 | `dp` | Dynamic programming for optimal alignment | High accuracy needed |
-| `hybrid` | DP with fallback to greedy | Legacy recommended |
+| `hybrid` | DP with fallback to greedy | Long surahs with timing drift |
+
+> **AUTO strategy selection:** For long surahs (>4000 words), AUTO selects HYBRID which handles
+> timing drift better. For shorter surahs with audio, it selects CTC_SEG for acoustic precision.
+> CTC refinement still runs as a post-processing step regardless of the primary strategy.
 
 ## Models
 
@@ -240,6 +248,9 @@ Use CTC acoustic models for frame-accurate ayah boundaries:
 aligner = Aligner("001.mp3", strategy="ctc_seg")
 results = aligner.align(segments, ayahs)
 ```
+
+> **Long audio note:** CTC inference automatically processes audio in 30-second overlapping chunks
+> to avoid GPU memory issues. This is transparent — no configuration needed.
 
 ### CTC Refinement
 
