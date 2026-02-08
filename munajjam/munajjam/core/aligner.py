@@ -89,21 +89,13 @@ class Aligner:
         return self._last_stats
 
     def _select_strategy(self, ayahs: list[Ayah]) -> AlignmentStrategy:
-        """Pick the best concrete strategy based on surah characteristics.
+        """Pick the best concrete strategy.
 
-        For long surahs (>4000 words): HYBRID (segment-DP + greedy fallback)
-        handles timing drift much better than word-level DP.
-
-        For shorter surahs: WORD_DP for precise word-level alignment.
+        HYBRID is best or tied-for-best across all surah sizes (short,
+        medium, and long) and is the least dependent on post-processing
+        drift correction.
         """
-        total_words = sum(len(a.text.split()) for a in ayahs)
-        avg_words = total_words / len(ayahs) if ayahs else 0
-
-        # Long surahs: HYBRID handles drift better
-        if total_words > 4000 and avg_words > 15:
-            return AlignmentStrategy.HYBRID
-
-        return AlignmentStrategy.WORD_DP
+        return AlignmentStrategy.HYBRID
 
     def align(
         self,

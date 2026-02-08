@@ -153,14 +153,11 @@ results = align("001.mp3", segments, ayahs)
 
 | Strategy | Description | Use Case |
 |----------|-------------|----------|
-| `auto` | Picks best strategy based on surah size | **Recommended** - HYBRID for long surahs, WORD_DP for short |
-| `word_dp` | Word-level DP with per-word timestamps | Sub-segment precision |
-| `greedy` | Fast, simple matching | Quick prototyping |
-| `dp` | Dynamic programming for optimal alignment | High accuracy needed |
-| `hybrid` | DP with fallback to greedy | Long surahs with timing drift |
-
-> **AUTO strategy selection:** For long surahs (>4000 words), AUTO selects HYBRID which handles
-> timing drift better. For shorter surahs, it selects WORD_DP for precise word-level alignment.
+| `auto` | Always selects HYBRID | **Recommended** - best across all surah sizes |
+| `hybrid` | DP with fallback to greedy | Best accuracy, robust to drift |
+| `word_dp` | Word-level DP with per-word timestamps | Sub-segment precision (used internally) |
+| `dp` | Dynamic programming for optimal alignment | Good for medium surahs |
+| `greedy` | Fast, simple matching | Quick prototyping only |
 
 ## Models
 
