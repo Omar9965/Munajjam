@@ -23,6 +23,7 @@ from munajjam.transcription.silence import detect_silences
 from munajjam.core import Aligner, normalize_arabic, similarity
 from munajjam.data import load_surah_ayahs, get_ayah_count
 from munajjam.models import Segment, SegmentType
+from munajjam.formatting import format_results
 
 
 def test_with_transcription(audio_path: str, surah_id: int):
@@ -94,18 +95,7 @@ def test_with_transcription(audio_path: str, surah_id: int):
     
     # Generate JSON output
     output_file = f"output_surah_{surah_id:03d}.json"
-    output = []
-    for result in results:
-        output.append({
-            "id": result.ayah.ayah_number,
-            "sura_id": result.ayah.surah_id,
-            "ayah_index": result.ayah.ayah_number - 1,
-            "start": round(result.start_time, 2),
-            "end": round(result.end_time, 2),
-            "transcribed_text": result.transcribed_text,
-            "corrected_text": result.ayah.text,
-            "similarity_score": round(result.similarity_score, 3),
-        })
+    output = format_results(results, surah_id=surah_id)
     
     with open(output_file, "w", encoding="utf-8") as f:
         json.dump(output, f, ensure_ascii=False, indent=2)

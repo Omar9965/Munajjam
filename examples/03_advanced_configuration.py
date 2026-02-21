@@ -13,6 +13,7 @@ from munajjam.transcription import WhisperTranscriber, detect_silences
 from munajjam.core import Aligner
 from munajjam.data import load_surah_ayahs
 from munajjam.config import configure
+from munajjam.formatting import format_results
 
 
 def progress_callback(current, total):
@@ -142,19 +143,8 @@ def main():
 
     # Step 8: Export to JSON
     print("\nStep 8: Exporting results...")
-    import json
 
-    output = []
-    for r in results:
-        output.append({
-            "ayah_number": r.ayah.ayah_number,
-            "start_time": round(r.start_time, 3),
-            "end_time": round(r.end_time, 3),
-            "duration": round(r.duration, 3),
-            "similarity_score": round(r.similarity_score, 3),
-            "overlap_detected": r.overlap_detected,
-            "transcribed_text": r.transcribed_text,
-        })
+    output = format_results(results, surah_id=surah_number)
 
     output_path = f"surah_{surah_number:03d}_alignment.json"
     with open(output_path, 'w', encoding='utf-8') as f:

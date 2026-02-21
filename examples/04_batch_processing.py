@@ -11,6 +11,7 @@ This example demonstrates how to process multiple surahs efficiently:
 from munajjam.transcription import WhisperTranscriber
 from munajjam.core import Aligner
 from munajjam.data import load_surah_ayahs, get_all_surahs
+from munajjam.formatting import format_results
 from pathlib import Path
 import json
 import time
@@ -109,20 +110,8 @@ def main():
             # Save results
             output_file = output_directory / f"surah_{surah_number:03d}_alignment.json"
 
-            output_data = {
-                "surah_number": surah_number,
-                "stats": stats,
-                "results": [
-                    {
-                        "ayah_number": r.ayah.ayah_number,
-                        "start_time": round(r.start_time, 3),
-                        "end_time": round(r.end_time, 3),
-                        "similarity_score": round(r.similarity_score, 3),
-                        "overlap_detected": r.overlap_detected,
-                    }
-                    for r in results
-                ]
-            }
+            output_data = format_results(results, surah_id=surah_number)
+            output_data["stats"] = stats
 
             with open(output_file, 'w', encoding='utf-8') as f:
                 json.dump(output_data, f, ensure_ascii=False, indent=2)

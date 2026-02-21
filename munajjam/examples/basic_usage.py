@@ -10,10 +10,10 @@ This example demonstrates the core workflow:
 import json
 from pathlib import Path
 
-# Import core components
 from munajjam.transcription import WhisperTranscriber
 from munajjam.core import align
 from munajjam.data import load_surah_ayahs
+from munajjam.formatting import format_results
 
 
 def process_surah(audio_path: str, surah_id: int, reciter: str = "Unknown"):
@@ -69,18 +69,7 @@ def process_surah(audio_path: str, surah_id: int, reciter: str = "Unknown"):
     # Step 4: Create output
     print("\n📄 Step 4: Creating JSON output...")
     
-    output = []
-    for result in results:
-        output.append({
-            "id": result.ayah.ayah_number,
-            "sura_id": result.ayah.surah_id,
-            "ayah_index": result.ayah.ayah_number - 1,
-            "start": round(result.start_time, 2),
-            "end": round(result.end_time, 2),
-            "transcribed_text": result.transcribed_text,
-            "corrected_text": result.ayah.text,
-            "similarity_score": round(result.similarity_score, 3),
-        })
+    output = format_results(results, surah_id=surah_id)
     
     return output
 

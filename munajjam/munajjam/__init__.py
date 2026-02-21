@@ -27,6 +27,7 @@ from munajjam.models import (
     Surah,
 )
 from munajjam.config import MunajjamSettings, get_settings, configure
+from munajjam.formatting import format_result, format_results
 from munajjam.exceptions import (
     MunajjamError,
     TranscriptionError,
@@ -51,6 +52,9 @@ __all__ = [
     "MunajjamSettings",
     "get_settings",
     "configure",
+    # Formatting
+    "format_result",
+    "format_results",
     # Exceptions
     "MunajjamError",
     "TranscriptionError",
