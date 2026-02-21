@@ -78,11 +78,12 @@ def format_results(
                 "ayahs": [...]         # list of formatted results
             }
     """
-    output: dict = {
-        "ayahs": [format_result(r, precision) for r in results],
-    }
+    if precision < 0:
+        raise ValueError(f"precision must be non-negative, got {precision}")
+    output: dict = {}
     if surah_id is not None:
         output["surah_id"] = surah_id
     if reciter is not None:
         output["reciter"] = reciter
+    output["ayahs"] = [format_result(r, precision) for r in results]
     return output

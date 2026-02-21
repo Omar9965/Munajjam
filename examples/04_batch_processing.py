@@ -111,7 +111,7 @@ def main():
             output_file = output_directory / f"surah_{surah_number:03d}_alignment.json"
 
             output_data = {
-                "results": format_results(results, surah_id=surah_number),
+                **format_results(results, surah_id=surah_number),
                 "stats": stats,
             }
 
