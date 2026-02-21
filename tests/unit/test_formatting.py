@@ -89,9 +89,18 @@ class TestFormatResult:
         assert out2["start_time"] == round(5.6789, 2)
         assert out2["similarity_score"] == round(0.9567, 2)
 
-        out5 = format_result(sample_result, precision=5)
-        assert out5["start_time"] == round(5.6789, 5)
-        assert out5["similarity_score"] == round(0.9567, 5)
+        # Build a result with >5 decimal places so precision=5 actually rounds
+        precise_result = AlignmentResult(
+            ayah=sample_result.ayah,
+            start_time=5.678901234,
+            end_time=9.123456789,
+            transcribed_text=sample_result.transcribed_text,
+            similarity_score=0.956789012,
+            overlap_detected=False,
+        )
+        out5 = format_result(precise_result, precision=5)
+        assert out5["start_time"] == round(5.678901234, 5)
+        assert out5["similarity_score"] == round(0.956789012, 5)
 
     def test_format_result_overlap_true(self, sample_result_with_overlap):
         """overlap_detected: True propagates correctly."""

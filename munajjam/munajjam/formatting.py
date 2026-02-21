@@ -36,7 +36,10 @@ def format_result(result: AlignmentResult, precision: int = 3) -> dict:
                 "is_high_confidence": bool,
                 "overlap_detected": bool,
             }
+
     """
+    if precision < 0:
+        raise ValueError(f"precision must be non-negative, got {precision}")
     return {
         "ayah_number": result.ayah.ayah_number,
         "surah_id": result.ayah.surah_id,

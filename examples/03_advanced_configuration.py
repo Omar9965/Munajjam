@@ -14,6 +14,7 @@ from munajjam.core import Aligner
 from munajjam.data import load_surah_ayahs
 from munajjam.config import configure
 from munajjam.formatting import format_results
+import json
 
 
 def progress_callback(current, total):

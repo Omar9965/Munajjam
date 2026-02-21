@@ -26,7 +26,7 @@ def process_surah(audio_path: str, surah_id: int, reciter: str = "Unknown"):
         reciter: Name of the reciter
     
     Returns:
-        List of alignment results as dictionaries
+        Formatted alignment results as a dict produced by format_results
     """
     print(f"Processing Surah {surah_id} from {audio_path}")
     print("=" * 50)
@@ -69,12 +69,12 @@ def process_surah(audio_path: str, surah_id: int, reciter: str = "Unknown"):
     # Step 4: Create output
     print("\n📄 Step 4: Creating JSON output...")
     
-    output = format_results(results, surah_id=surah_id)
+    output = format_results(results, surah_id=surah_id, reciter=reciter)
     
     return output
 
 
-def save_to_json(output: list, output_path: str):
+def save_to_json(output: dict, output_path: str):
     """Save output to JSON file."""
     print(f"\n💾 Saving to: {output_path}")
     

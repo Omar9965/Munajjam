@@ -110,8 +110,10 @@ def main():
             # Save results
             output_file = output_directory / f"surah_{surah_number:03d}_alignment.json"
 
-            output_data = format_results(results, surah_id=surah_number)
-            output_data["stats"] = stats
+            output_data = {
+                "results": format_results(results, surah_id=surah_number),
+                "stats": stats,
+            }
 
             with open(output_file, 'w', encoding='utf-8') as f:
                 json.dump(output_data, f, ensure_ascii=False, indent=2)
